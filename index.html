@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homelab Services</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="ascii-cats.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Documentation Panel -->
+        <div id="docs-panel" class="docs-panel">
+            <div class="docs-header">
+                <h2 id="docs-title">Documentation</h2>
+                <button id="close-docs" class="close-btn">&times;</button>
+            </div>
+            <div id="docs-content" class="docs-content">
+                <p>Select a service with documentation to view details here.</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="container">
+                <header>
+                    <h1>$ homelab services</h1>
+                    <div class="status-bar">
+                        <span id="service-count">Loading...</span>
+                        <span id="current-time"></span>
+                    </div>
+                </header>
+
+                <main>
+                    <div id="services-grid" class="services-grid">
+                        <!-- Services will be loaded here -->
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+{
+    "services": [
+        {
+            "name": "plex",
+            "category": "media",
+            "url": "http://192.168.0.23:32400/web",
+            "docs": "docs/plex.md",
+            "description": "Media streaming server"
+        },
+        {
+            "name": "sonarr",
+            "category": "media",
+            "url": "http://192.168.0.23:8989",
+            "description": "TV show management"
+        },
+        {
+            "name": "radarr",
+            "category": "media",
+            "url": "http://192.168.0.23:7878",
+            "description": "Movie management"
+        },
+        {
+            "name": "prowlarr",
+            "category": "media",
+            "url": "http://192.168.0.23:9696",
+            "description": "Indexer manager"
+        },
+        {
+            "name": "deluge",
+            "category": "downloads",
+            "url": "http://192.168.0.23:8112",
+            "description": "BitTorrent client"
+        },
+        {
+            "name": "slskd",
+            "category": "downloads",
+            "url": "http://192.168.0.23:5030",
+            "description": "Soulseek client"
+        },
+        {
+            "name": "gallery-dl",
+            "category": "downloads",
+            "url": "http://192.168.0.23:7777",
+            "description": "Media downloader"
+        },
+        {
+            "name": "beszel",
+            "category": "monitoring",
+            "url": "http://192.168.0.23:8099",
+            "description": "System monitoring"
+        },
+        {
+            "name": "nginx-proxy-manager",
+            "category": "infrastructure",
+            "url": "http://192.168.0.23:1880",
+            "docs": "docs/nginx-proxy-manager.md",
+            "description": "Reverse proxy manager"
+        },
+        {
+            "name": "handbrake",
+            "category": "utilities",
+            "url": "http://192.168.0.23:7803",
+            "description": "Video transcoding"
+        },
+        {
+            "name": "stash",
+            "category": "utilities",
+            "url": "http://192.168.0.23:9999",
+            "description": "Media organization"
+        },
+        {
+            "name": "picoshare",
+            "category": "utilities",
+            "url": "http://192.168.0.23:3001",
+            "description": "File sharing"
+        },
+        {
+            "name": "cactus",
+            "category": "utilities",
+            "url": "http://192.168.0.23:6009",
+            "description": "Image gallery"
+        },
+        {
+            "name": "adguard-home",
+            "category": "network",
+            "url": "http://192.168.0.25:3001",
+            "docs": "docs/adguard-home.md",
+            "description": "Network-wide ad blocking"
+        },
+        {
+            "name": "homebridge",
+            "category": "network",
+            "url": "http://192.168.0.25:8581",
+            "description": "HomeKit integration"
+        }
+    ]
+}
