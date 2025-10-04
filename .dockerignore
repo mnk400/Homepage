@@ -1,0 +1,9 @@
+# Ignore files that don't need to be in the Docker image
+.git
+.gitignore
+README.md
+Dockerfile
+.dockerignore
+*.log
+node_modules
+.DS_Store
