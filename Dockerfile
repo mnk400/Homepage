@@ -7,8 +7,8 @@ COPY . /usr/share/nginx/html
 # Create a custom Nginx configuration for better performance
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 6666
-EXPOSE 6666
+# Expose port 80
+EXPOSE 80
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
