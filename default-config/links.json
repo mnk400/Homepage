@@ -1,5 +1,9 @@
 {
-  "services": [
+  "branding": {
+    "title": "Link Dashboard",
+    "showAsciiArt": true
+  },
+  "links": [
     {
       "name": "jellyfin",
       "category": "media",

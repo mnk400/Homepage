@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homelab Services</title>
+    <title>Homepage</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="ascii-cats.js"></script>
@@ -19,7 +20,7 @@
                 <button id="close-docs" class="close-btn">&times;</button>
             </div>
             <div id="docs-content" class="docs-content">
-                <p>Select a service with documentation to view details here.</p>
+                <p>Select a link with documentation to view details here.</p>
             </div>
         </div>
 
@@ -27,16 +28,21 @@
         <div class="main-content">
             <div class="container">
                 <header>
-                    <h1>$ homelab services</h1>
+                    <h1 id="page-title">$ homepage/h1>
                     <div class="status-bar">
-                        <span id="service-count">Loading...</span>
+                        <span id="link-count">Loading...</span>
                         <span id="current-time"></span>
                     </div>
                 </header>
+                
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Search links..." />
+                </div>
 
                 <main>
-                    <div id="services-grid" class="services-grid">
-                        <!-- Services will be loaded here -->
+                    <div id="links-grid" class="links-grid">
+                        <!-- Links will be loaded here -->
                     </div>
                 </main>
             </div>

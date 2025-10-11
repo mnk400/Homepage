@@ -1,20 +1,49 @@
 // Homelab Homepage JavaScript
 
 
-class HomelabDashboard {
+class LinkDashboard {
     constructor() {
-        this.services = [];
+        this.links = [];
+        this.branding = {};
         this.docsPanel = document.getElementById('docs-panel');
+        this.searchInput = document.getElementById('search-input');
+        this.isLoading = false;
         this.init();
     }
 
     async init() {
-        this.displayRandomCat();
-        await this.loadServices();
-        this.renderServices();
+        this.showLoading(true);
+        await this.loadConfiguration();
+        this.applyBranding();
+        this.renderLinks();
         this.setupEventListeners();
         this.updateTime();
         setInterval(() => this.updateTime(), 1000);
+        this.showLoading(false);
+    }
+
+    showLoading(isLoading) {
+        this.isLoading = isLoading;
+        const container = document.querySelector('.main-content');
+        if (isLoading) {
+            container.classList.add('loading');
+        } else {
+            container.classList.remove('loading');
+        }
+    }
+
+    applyBranding() {
+        // Update page title
+        if (this.branding.title) {
+            document.title = this.branding.title;
+            const pageTitle = document.getElementById('page-title');
+            pageTitle.textContent = `$ ${this.branding.title.toLowerCase()}`;
+        }
+
+        // Show/hide ASCII art
+        if (this.branding.showAsciiArt !== false) {
+            this.displayRandomCat();
+        }
     }
 
     displayRandomCat() {
@@ -23,40 +52,48 @@ class HomelabDashboard {
         headerTitle.innerHTML = `<pre>${randomCat}</pre>`;
     }
 
-    async loadServices() {
+    async loadConfiguration() {
         // Try to load from external config first, then fallback to default
         const configPaths = [
-            '/config/services.json',     // External config (Docker volume)
-            'default-config/services.json' // Default config
+            '/config/links.json',     // External config (Docker volume)
+            'default-config/links.json' // Default config
         ];
-        
+
         for (const configPath of configPaths) {
             try {
-                console.log(`Attempting to load services from: ${configPath}`);
+                console.log(`Attempting to load configuration from: ${configPath}`);
                 const response = await fetch(configPath);
-                
+
                 if (response.ok) {
                     const data = await response.json();
-                    this.services = data.services;
+                    this.links = data.links || [];
+                    this.branding = data.branding || {};
                     this.configPath = configPath.includes('/config/') ? '/config/' : 'default-config/';
-                    console.log(`✓ Successfully loaded services from: ${configPath}`);
-                    this.updateServiceCount();
+                    console.log(`✓ Successfully loaded configuration from: ${configPath}`);
+                    this.updateLinkCount();
                     return;
                 }
             } catch (error) {
                 console.warn(`Failed to load from ${configPath}:`, error.message);
             }
         }
-        
-        console.error('❌ Failed to load services from any configuration source');
-        this.services = [];
+
+        console.error('❌ Failed to load configuration from any source');
+        this.showError('Failed to load configuration. Please check your setup.');
+        this.links = [];
+        this.branding = {};
         this.configPath = 'default-config/';
     }
 
-    renderServices() {
-        const grid = document.getElementById('services-grid');
+    showError(message) {
+        const grid = document.getElementById('links-grid');
+        grid.innerHTML = `<div class="error-state">${message}</div>`;
+    }
 
-        // Group services by category
+    renderLinks() {
+        const grid = document.getElementById('links-grid');
+
+        // Group links by category
         const categories = this.groupByCategory();
 
         grid.innerHTML = '';
@@ -68,17 +105,17 @@ class HomelabDashboard {
     }
 
     groupByCategory() {
-        return this.services.reduce((acc, service) => {
-            const category = service.category || 'misc';
+        return this.links.reduce((acc, link) => {
+            const category = link.category || 'misc';
             if (!acc[category]) {
                 acc[category] = [];
             }
-            acc[category].push(service);
+            acc[category].push(link);
             return acc;
         }, {});
     }
 
-    createCategorySection(categoryName, services) {
+    createCategorySection(categoryName, links) {
         const section = document.createElement('div');
         section.className = 'category-section';
 
@@ -87,29 +124,31 @@ class HomelabDashboard {
         title.textContent = categoryName;
         section.appendChild(title);
 
-        services.forEach(service => {
-            const serviceItem = this.createServiceItem(service);
-            section.appendChild(serviceItem);
+        links.forEach(link => {
+            const linkItem = this.createLinkItem(link);
+            section.appendChild(linkItem);
         });
 
         return section;
     }
 
-    createServiceItem(service) {
+    createLinkItem(link) {
         const item = document.createElement('a');
-        item.className = 'service-item';
-        item.href = service.url;
+        item.className = 'link-item';
+        item.href = link.url;
         item.target = '_blank';
         item.rel = 'noopener noreferrer';
+        item.dataset.description = link.description || '';
 
         const name = document.createElement('span');
-        name.className = 'service-name';
-        name.textContent = service.name;
+        name.className = 'link-name';
+        name.textContent = link.name;
+        name.title = link.description || '';
         item.appendChild(name);
 
-        if (service.docs) {
+        if (link.docs) {
             const actions = document.createElement('div');
-            actions.className = 'service-actions';
+            actions.className = 'link-actions';
 
             const docsBtn = document.createElement('button');
             docsBtn.className = 'docs-btn';
@@ -118,7 +157,7 @@ class HomelabDashboard {
             docsBtn.onclick = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                this.showDocs(service);
+                this.showDocs(link);
             };
 
             actions.appendChild(docsBtn);
@@ -128,27 +167,27 @@ class HomelabDashboard {
         return item;
     }
 
-    async showDocs(service) {
+    async showDocs(link) {
         const docsTitle = document.getElementById('docs-title');
         const docsContent = document.getElementById('docs-content');
-        
-        docsTitle.textContent = `${service.name} Documentation`;
+
+        docsTitle.textContent = `${link.name} Documentation`;
         docsContent.innerHTML = '<p>Loading documentation...</p>';
-        
+
         // Open the docs panel
         this.docsPanel.classList.add('open');
-        
+
         // Try to load docs from external config first, then fallback to default
         const docsPaths = [
-            `/config/${service.docs.replace('docs/', '')}`,  // External config docs
-            `default-config/${service.docs}`                 // Default config docs
+            `/config/${link.docs.replace('docs/', '')}`,  // External config docs
+            `default-config/${link.docs}`                 // Default config docs
         ];
-        
+
         for (const docsPath of docsPaths) {
             try {
                 console.log(`Attempting to load docs from: ${docsPath}`);
                 const response = await fetch(docsPath);
-                
+
                 if (response.ok) {
                     const markdown = await response.text();
                     const html = marked.parse(markdown);
@@ -160,10 +199,10 @@ class HomelabDashboard {
                 console.warn(`Failed to load docs from ${docsPath}:`, error.message);
             }
         }
-        
+
         // If all attempts failed
         docsContent.innerHTML = `
-            <p>❌ Failed to load documentation for ${service.name}</p>
+            <p>❌ Failed to load documentation for ${link.name}</p>
             <p>Tried paths:</p>
             <ul>
                 ${docsPaths.map(path => `<li><code>${path}</code></li>`).join('')}
@@ -185,11 +224,53 @@ class HomelabDashboard {
                 this.docsPanel.classList.remove('open');
             }
         });
+
+        // Search functionality
+        this.searchInput.addEventListener('input', (event) => {
+            this.filterLinks(event.target.value);
+        });
+
+        // Clear search on Escape
+        this.searchInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                this.searchInput.value = '';
+                this.filterLinks('');
+            }
+        });
     }
 
-    updateServiceCount() {
-        const countElement = document.getElementById('service-count');
-        countElement.textContent = `${this.services.length} services available`;
+    filterLinks(searchTerm) {
+        const term = searchTerm.toLowerCase().trim();
+        const categories = document.querySelectorAll('.category-section');
+
+        categories.forEach(category => {
+            const links = category.querySelectorAll('.link-item');
+            let hasVisibleLinks = false;
+
+            links.forEach(link => {
+                const linkName = link.querySelector('.link-name').textContent.toLowerCase();
+                const linkDesc = link.dataset.description?.toLowerCase() || '';
+
+                if (term === '' || linkName.includes(term) || linkDesc.includes(term)) {
+                    link.classList.remove('hidden');
+                    hasVisibleLinks = true;
+                } else {
+                    link.classList.add('hidden');
+                }
+            });
+
+            // Hide category if no links are visible
+            if (hasVisibleLinks || term === '') {
+                category.classList.remove('hidden');
+            } else {
+                category.classList.add('hidden');
+            }
+        });
+    }
+
+    updateLinkCount() {
+        const countElement = document.getElementById('link-count');
+        countElement.textContent = `${this.links.length} links available`;
     }
 
     updateTime() {
@@ -207,5 +288,5 @@ class HomelabDashboard {
 
 // Initialize the dashboard when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    new HomelabDashboard();
+    new LinkDashboard();
 });
