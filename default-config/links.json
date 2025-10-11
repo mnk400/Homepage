@@ -1,7 +1,8 @@
 {
   "branding": {
     "title": "Link Dashboard",
-    "showAsciiArt": true
+    "showAsciiArt": true,
+    "textHighlight": "#6086b5"
   },
   "links": [
     {

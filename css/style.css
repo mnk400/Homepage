@@ -1,7 +1,7 @@
 /* Font Face Declaration */
 @font-face {
     font-family: 'Berkeley Mono';
-    src: url('assets/font/BerkeleyMono-Regular.otf') format('opentype');
+    src: url('../assets/font/BerkeleyMono-Regular.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -18,7 +18,7 @@
     /* Hover states, borders - lighter gray */
 
     /* Text Colors */
-    --text-primary: #f8a5c2;
+    --text-highlight: #f8a5c2;
     /* Primary pastel pink text */
     --text-secondary: #a0a0a0;
     /* Muted gray text */
@@ -44,7 +44,7 @@
 
 body {
     background-color: var(--bg-primary);
-    color: var(--text-primary);
+    color: var(--text-highlight);
     font-family: 'Berkeley Mono', 'Courier New', 'Monaco', monospace;
     font-size: 14px;
     line-height: 1.6;
@@ -85,7 +85,7 @@ body {
 }
 
 .docs-header h2 {
-    color: var(--text-primary);
+    color: var(--text-highlight);
     font-size: 1.2rem;
     font-weight: normal;
     margin: 0;
@@ -102,7 +102,7 @@ body {
 }
 
 .close-btn:hover {
-    color: var(--text-primary);
+    color: var(--text-highlight);
 }
 
 .docs-content {
@@ -142,7 +142,7 @@ header {
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-primary);
     border-radius: 4px;
-    color: var(--text-primary);
+    color: var(--text-highlight);
     font-family: 'Berkeley Mono', 'Courier New', 'Monaco', monospace;
     font-size: 0.9rem;
     transition: all 0.2s ease;
@@ -185,7 +185,7 @@ header h1 {
     font-size: 1.5rem;
     font-weight: normal;
     margin-bottom: 1rem;
-    color: var(--text-primary);
+    color: var(--text-highlight);
 }
 
 header h1 pre {
@@ -194,7 +194,7 @@ header h1 pre {
     line-height: 1.2;
     margin: 0;
     white-space: pre;
-    color: var(--text-primary);
+    color: var(--text-highlight);
 }
 
 .status-bar {
@@ -220,7 +220,7 @@ header h1 pre {
 }
 
 .category-title {
-    color: var(--text-primary);
+    color: var(--text-highlight);
     font-size: 1.1rem;
     margin-bottom: 1rem;
     border-bottom: 1px solid var(--border-primary);
@@ -238,7 +238,7 @@ header h1 pre {
 }
 
 .link-item:hover {
-    color: var(--text-primary);
+    color: var(--text-highlight);
 }
 
 .link-name {
@@ -270,14 +270,14 @@ header h1 pre {
 
 .docs-btn:hover {
     background-color: var(--hover-bg);
-    color: var(--text-primary);
+    color: var(--text-highlight);
 }
 
 /* Markdown content styling */
 .docs-content h1,
 .docs-content h2,
 .docs-content h3 {
-    color: var(--text-primary);
+    color: var(--text-highlight);
     margin: 1rem 0 0.5rem 0;
 }
 
@@ -302,7 +302,7 @@ header h1 pre {
     padding: 0.2rem 0.4rem;
     border-radius: 2px;
     font-family: 'Berkeley Mono', 'Courier New', 'Monaco', monospace;
-    color: var(--text-primary);
+    color: var(--text-highlight);
 }
 
 .docs-content pre {
@@ -325,7 +325,7 @@ header h1 pre {
 }
 
 .docs-content a {
-    color: var(--text-primary);
+    color: var(--text-highlight);
     text-decoration: underline;
 }
 

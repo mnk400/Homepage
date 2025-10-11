@@ -40,6 +40,11 @@ class LinkDashboard {
             pageTitle.textContent = `$ ${this.branding.title.toLowerCase()}`;
         }
 
+        // Apply custom text highlight color if specified
+        if (this.branding.textHighlight) {
+            document.documentElement.style.setProperty('--text-highlight', this.branding.textHighlight);
+        }
+
         // Show/hide ASCII art
         if (this.branding.showAsciiArt !== false) {
             this.displayRandomCat();
@@ -277,8 +282,8 @@ class LinkDashboard {
         const timeElement = document.getElementById('current-time');
         const now = new Date();
         const timeString = now.toLocaleTimeString('en-US', {
-            hour12: false,
-            hour: '2-digit',
+            hour12: true,
+            hour: 'numeric',
             minute: '2-digit',
             second: '2-digit'
         });
