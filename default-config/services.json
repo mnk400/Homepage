@@ -1,0 +1,79 @@
+{
+  "services": [
+    {
+      "name": "jellyfin",
+      "category": "media",
+      "url": "http://localhost:8096",
+      "docs": "docs/jellyfin.md",
+      "description": "Media streaming server"
+    },
+    {
+      "name": "nextcloud",
+      "category": "productivity",
+      "url": "http://localhost:8080",
+      "docs": "docs/nextcloud.md",
+      "description": "File sync and collaboration"
+    },
+    {
+      "name": "portainer",
+      "category": "infrastructure",
+      "url": "http://localhost:9000",
+      "description": "Docker container management"
+    },
+    {
+      "name": "grafana",
+      "category": "monitoring",
+      "url": "http://localhost:3000",
+      "description": "Metrics and monitoring dashboard"
+    },
+    {
+      "name": "prometheus",
+      "category": "monitoring",
+      "url": "http://localhost:9090",
+      "description": "Metrics collection system"
+    },
+    {
+      "name": "transmission",
+      "category": "downloads",
+      "url": "http://localhost:9091",
+      "description": "BitTorrent client"
+    },
+    {
+      "name": "code-server",
+      "category": "development",
+      "url": "http://localhost:8443",
+      "description": "VS Code in the browser"
+    },
+    {
+      "name": "gitea",
+      "category": "development",
+      "url": "http://localhost:3001",
+      "description": "Git repository hosting"
+    },
+    {
+      "name": "pihole",
+      "category": "network",
+      "url": "http://localhost:8081",
+      "docs": "docs/pihole.md",
+      "description": "Network-wide ad blocking"
+    },
+    {
+      "name": "home-assistant",
+      "category": "automation",
+      "url": "http://localhost:8123",
+      "description": "Home automation platform"
+    },
+    {
+      "name": "uptime-kuma",
+      "category": "monitoring",
+      "url": "http://localhost:3001",
+      "description": "Uptime monitoring"
+    },
+    {
+      "name": "bookstack",
+      "category": "productivity",
+      "url": "http://localhost:6875",
+      "description": "Documentation wiki"
+    }
+  ]
+}

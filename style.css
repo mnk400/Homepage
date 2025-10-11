@@ -1,5 +1,14 @@
 /* Terminal-inspired homelab homepage */
 
+/* Font Face Declaration */
+@font-face {
+    font-family: 'Berkeley Mono';
+    src: url('assets/font/BerkeleyMono-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Color Theme Variables */
 :root {
     /* Background Colors */
@@ -38,7 +47,7 @@
 body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    font-family: 'Courier New', 'Monaco', monospace;
+    font-family: 'Berkeley Mono', 'Courier New', 'Monaco', monospace;
     font-size: 14px;
     line-height: 1.6;
     min-height: 100vh;
@@ -91,7 +100,7 @@ body {
     font-size: 1.5rem;
     cursor: pointer;
     transition: color 0.2s ease;
-    font-family: inherit;
+    font-family: 'Berkeley Mono', 'Courier New', 'Monaco', monospace;
 }
 
 .close-btn:hover {
@@ -130,7 +139,7 @@ header h1 {
 }
 
 header h1 pre {
-    font-family: 'Courier New', 'Monaco', monospace;
+    font-family: 'Berkeley Mono', 'Courier New', 'Monaco', monospace;
     font-size: 0.8rem;
     line-height: 1.2;
     margin: 0;
@@ -202,7 +211,7 @@ header h1 pre {
     border: none;
     color: var(--bg-tertiary);
     cursor: pointer;
-    font-family: inherit;
+    font-family: 'Berkeley Mono', 'Courier New', 'Monaco', monospace;
     font-size: 0.8rem;
     padding: 0.2rem 0.4rem;
     border-radius: 2px;
@@ -242,7 +251,7 @@ header h1 pre {
     background-color: var(--bg-primary);
     padding: 0.2rem 0.4rem;
     border-radius: 2px;
-    font-family: inherit;
+    font-family: 'Berkeley Mono', 'Courier New', 'Monaco', monospace;
     color: var(--text-primary);
 }
 

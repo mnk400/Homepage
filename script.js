@@ -24,15 +24,33 @@ class HomelabDashboard {
     }
 
     async loadServices() {
-        try {
-            const response = await fetch('services.json');
-            const data = await response.json();
-            this.services = data.services;
-            this.updateServiceCount();
-        } catch (error) {
-            console.error('Failed to load services:', error);
-            this.services = [];
+        // Try to load from external config first, then fallback to default
+        const configPaths = [
+            '/config/services.json',     // External config (Docker volume)
+            'default-config/services.json' // Default config
+        ];
+        
+        for (const configPath of configPaths) {
+            try {
+                console.log(`Attempting to load services from: ${configPath}`);
+                const response = await fetch(configPath);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    this.services = data.services;
+                    this.configPath = configPath.includes('/config/') ? '/config/' : 'default-config/';
+                    console.log(`✓ Successfully loaded services from: ${configPath}`);
+                    this.updateServiceCount();
+                    return;
+                }
+            } catch (error) {
+                console.warn(`Failed to load from ${configPath}:`, error.message);
+            }
         }
+        
+        console.error('❌ Failed to load services from any configuration source');
+        this.services = [];
+        this.configPath = 'default-config/';
     }
 
     renderServices() {
@@ -113,28 +131,45 @@ class HomelabDashboard {
     async showDocs(service) {
         const docsTitle = document.getElementById('docs-title');
         const docsContent = document.getElementById('docs-content');
-
+        
         docsTitle.textContent = `${service.name} Documentation`;
         docsContent.innerHTML = '<p>Loading documentation...</p>';
-
+        
         // Open the docs panel
         this.docsPanel.classList.add('open');
-
-        try {
-            const response = await fetch(service.docs);
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+        
+        // Try to load docs from external config first, then fallback to default
+        const docsPaths = [
+            `/config/${service.docs.replace('docs/', '')}`,  // External config docs
+            `default-config/${service.docs}`                 // Default config docs
+        ];
+        
+        for (const docsPath of docsPaths) {
+            try {
+                console.log(`Attempting to load docs from: ${docsPath}`);
+                const response = await fetch(docsPath);
+                
+                if (response.ok) {
+                    const markdown = await response.text();
+                    const html = marked.parse(markdown);
+                    docsContent.innerHTML = html;
+                    console.log(`✓ Successfully loaded docs from: ${docsPath}`);
+                    return;
+                }
+            } catch (error) {
+                console.warn(`Failed to load docs from ${docsPath}:`, error.message);
             }
-            const markdown = await response.text();
-            const html = marked.parse(markdown);
-            docsContent.innerHTML = html;
-        } catch (error) {
-            docsContent.innerHTML = `
-                <p>Failed to load documentation for ${service.name}</p>
-                <p>Error: ${error.message}</p>
-                <p>Expected file: ${service.docs}</p>
-            `;
         }
+        
+        // If all attempts failed
+        docsContent.innerHTML = `
+            <p>❌ Failed to load documentation for ${service.name}</p>
+            <p>Tried paths:</p>
+            <ul>
+                ${docsPaths.map(path => `<li><code>${path}</code></li>`).join('')}
+            </ul>
+            <p>Make sure the documentation file exists in your config directory.</p>
+        `;
     }
 
     setupEventListeners() {
