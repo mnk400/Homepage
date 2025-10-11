@@ -1,10 +1,8 @@
-// Homelab Homepage JavaScript
-
+// Link Dashboard UI Manager
 
 class LinkDashboard {
     constructor() {
-        this.links = [];
-        this.branding = {};
+        this.configManager = new ConfigManager();
         this.docsPanel = document.getElementById('docs-panel');
         this.searchInput = document.getElementById('search-input');
         this.isLoading = false;
@@ -13,7 +11,14 @@ class LinkDashboard {
 
     async init() {
         this.showLoading(true);
-        await this.loadConfiguration();
+        const configResult = await this.configManager.loadConfiguration();
+        
+        if (!configResult.success) {
+            this.showError(configResult.error);
+            this.showLoading(false);
+            return;
+        }
+
         this.applyBranding();
         this.renderLinks();
         this.setupEventListeners();
@@ -32,21 +37,28 @@ class LinkDashboard {
         }
     }
 
+    showError(message) {
+        const grid = document.getElementById('links-grid');
+        grid.innerHTML = `<div class="error-state">${message}</div>`;
+    }
+
     applyBranding() {
+        const branding = this.configManager.getBranding();
+        
         // Update page title
-        if (this.branding.title) {
-            document.title = this.branding.title;
+        if (branding.title) {
+            document.title = branding.title;
             const pageTitle = document.getElementById('page-title');
-            pageTitle.textContent = `$ ${this.branding.title.toLowerCase()}`;
+            pageTitle.textContent = `$ ${branding.title.toLowerCase()}`;
         }
 
         // Apply custom text highlight color if specified
-        if (this.branding.textHighlight) {
-            document.documentElement.style.setProperty('--text-highlight', this.branding.textHighlight);
+        if (branding.textHighlight) {
+            document.documentElement.style.setProperty('--text-highlight', branding.textHighlight);
         }
 
         // Show/hide ASCII art
-        if (this.branding.showAsciiArt !== false) {
+        if (branding.showAsciiArt !== false) {
             this.displayRandomCat();
         }
     }
@@ -57,49 +69,12 @@ class LinkDashboard {
         headerTitle.innerHTML = `<pre>${randomCat}</pre>`;
     }
 
-    async loadConfiguration() {
-        // Try to load from external config first, then fallback to default
-        const configPaths = [
-            '/config/links.json',     // External config (Docker volume)
-            'default-config/links.json' // Default config
-        ];
-
-        for (const configPath of configPaths) {
-            try {
-                console.log(`Attempting to load configuration from: ${configPath}`);
-                const response = await fetch(configPath);
-
-                if (response.ok) {
-                    const data = await response.json();
-                    this.links = data.links || [];
-                    this.branding = data.branding || {};
-                    this.configPath = configPath.includes('/config/') ? '/config/' : 'default-config/';
-                    console.log(`✓ Successfully loaded configuration from: ${configPath}`);
-                    this.updateLinkCount();
-                    return;
-                }
-            } catch (error) {
-                console.warn(`Failed to load from ${configPath}:`, error.message);
-            }
-        }
-
-        console.error('❌ Failed to load configuration from any source');
-        this.showError('Failed to load configuration. Please check your setup.');
-        this.links = [];
-        this.branding = {};
-        this.configPath = 'default-config/';
-    }
-
-    showError(message) {
-        const grid = document.getElementById('links-grid');
-        grid.innerHTML = `<div class="error-state">${message}</div>`;
-    }
-
     renderLinks() {
         const grid = document.getElementById('links-grid');
+        const links = this.configManager.getLinks();
 
         // Group links by category
-        const categories = this.groupByCategory();
+        const categories = this.groupByCategory(links);
 
         grid.innerHTML = '';
 
@@ -107,10 +82,12 @@ class LinkDashboard {
             const categorySection = this.createCategorySection(category, categories[category]);
             grid.appendChild(categorySection);
         });
+
+        this.updateLinkCount();
     }
 
-    groupByCategory() {
-        return this.links.reduce((acc, link) => {
+    groupByCategory(links) {
+        return links.reduce((acc, link) => {
             const category = link.category || 'misc';
             if (!acc[category]) {
                 acc[category] = [];
@@ -182,38 +159,21 @@ class LinkDashboard {
         // Open the docs panel
         this.docsPanel.classList.add('open');
 
-        // Try to load docs from external config first, then fallback to default
-        const docsPaths = [
-            `/config/${link.docs.replace('docs/', '')}`,  // External config docs
-            `default-config/${link.docs}`                 // Default config docs
-        ];
+        const docsResult = await this.configManager.loadDocs(link);
 
-        for (const docsPath of docsPaths) {
-            try {
-                console.log(`Attempting to load docs from: ${docsPath}`);
-                const response = await fetch(docsPath);
-
-                if (response.ok) {
-                    const markdown = await response.text();
-                    const html = marked.parse(markdown);
-                    docsContent.innerHTML = html;
-                    console.log(`✓ Successfully loaded docs from: ${docsPath}`);
-                    return;
-                }
-            } catch (error) {
-                console.warn(`Failed to load docs from ${docsPath}:`, error.message);
-            }
+        if (docsResult.success) {
+            const html = marked.parse(docsResult.content);
+            docsContent.innerHTML = html;
+        } else {
+            docsContent.innerHTML = `
+                <p>❌ ${docsResult.error}</p>
+                <p>Tried paths:</p>
+                <ul>
+                    ${docsResult.paths.map(path => `<li><code>${path}</code></li>`).join('')}
+                </ul>
+                <p>Make sure the documentation file exists in your config directory.</p>
+            `;
         }
-
-        // If all attempts failed
-        docsContent.innerHTML = `
-            <p>❌ Failed to load documentation for ${link.name}</p>
-            <p>Tried paths:</p>
-            <ul>
-                ${docsPaths.map(path => `<li><code>${path}</code></li>`).join('')}
-            </ul>
-            <p>Make sure the documentation file exists in your config directory.</p>
-        `;
     }
 
     setupEventListeners() {
@@ -275,7 +235,8 @@ class LinkDashboard {
 
     updateLinkCount() {
         const countElement = document.getElementById('link-count');
-        countElement.textContent = `${this.links.length} links available`;
+        const links = this.configManager.getLinks();
+        countElement.textContent = `${links.length} links available`;
     }
 
     updateTime() {
@@ -290,8 +251,3 @@ class LinkDashboard {
         timeElement.textContent = timeString;
     }
 }
-
-// Initialize the dashboard when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    new LinkDashboard();
-});
