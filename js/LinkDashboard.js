@@ -12,7 +12,7 @@ class LinkDashboard {
     async init() {
         this.showLoading(true);
         const configResult = await this.configManager.loadConfiguration();
-        
+
         if (!configResult.success) {
             this.showError(configResult.error);
             this.showLoading(false);
@@ -44,7 +44,7 @@ class LinkDashboard {
 
     applyBranding() {
         const branding = this.configManager.getBranding();
-        
+
         // Update page title
         if (branding.title) {
             document.title = branding.title;
@@ -193,14 +193,20 @@ class LinkDashboard {
         // Search functionality
         this.searchInput.addEventListener('input', (event) => {
             this.filterLinks(event.target.value);
+            this.updateClearButton();
         });
 
         // Clear search on Escape
         this.searchInput.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
-                this.searchInput.value = '';
-                this.filterLinks('');
+                this.clearSearch();
             }
+        });
+
+        // Clear button functionality
+        const clearBtn = document.getElementById('clear-search');
+        clearBtn.addEventListener('click', () => {
+            this.clearSearch();
         });
     }
 
@@ -237,6 +243,22 @@ class LinkDashboard {
         const countElement = document.getElementById('link-count');
         const links = this.configManager.getLinks();
         countElement.textContent = `${links.length} links available`;
+    }
+
+    clearSearch() {
+        this.searchInput.value = '';
+        this.filterLinks('');
+        this.updateClearButton();
+        this.searchInput.focus();
+    }
+
+    updateClearButton() {
+        const clearBtn = document.getElementById('clear-search');
+        if (this.searchInput.value.trim()) {
+            clearBtn.classList.add('visible');
+        } else {
+            clearBtn.classList.remove('visible');
+        }
     }
 
     updateTime() {
