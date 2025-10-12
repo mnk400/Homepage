@@ -4,7 +4,7 @@
     background-color: var(--bg-secondary);
     border-right: 1px solid var(--border-primary);
     overflow: hidden;
-    transition: width 0.3s ease;
+    transition: width var(--transition-medium);
     display: flex;
     flex-direction: column;
 }
@@ -17,7 +17,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: var(--spacing-md);
     background-color: var(--bg-primary);
     border-bottom: 1px solid var(--border-primary);
     min-height: 60px;
@@ -33,10 +33,10 @@
 .close-btn {
     background: none;
     border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
     color: var(--text-secondary);
     font-size: 1.5rem;
-    cursor: pointer;
-    transition: color 0.2s ease;
 }
 
 .close-btn:hover {
@@ -45,7 +45,7 @@
 
 .docs-content {
     flex: 1;
-    padding: 1.5rem;
+    padding: var(--spacing-lg);
     overflow-y: auto;
     color: var(--text-tertiary);
 }
@@ -53,19 +53,19 @@
 /* Search Container */
 .search-container {
     position: relative;
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-xl);
     width: 100%;
 }
 
 #search-input {
     width: 100%;
-    padding: 0.75rem 3rem 0.75rem 1rem;
+    padding: 0.75rem 3rem 0.75rem var(--spacing-md);
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-primary);
-    border-radius: 4px;
+    border-radius: var(--border-radius-md);
     color: var(--text-highlight);
     font-size: 0.9rem;
-    transition: all 0.2s ease;
+    transition: all var(--transition-fast);
     opacity: 0.5;
 }
 
@@ -80,20 +80,20 @@
 
 .clear-btn {
     position: absolute;
-    right: 0.5rem;
+    right: var(--spacing-sm);
     top: 50%;
     transform: translateY(-50%);
     background-color: var(--bg-tertiary);
     border: none;
     color: var(--text-secondary);
-    padding: 0.25rem 0.5rem;
-    border-radius: 8px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-lg);
     cursor: pointer;
     font-size: 0.7rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: all var(--transition-fast);
     opacity: 0;
     pointer-events: none;
 }
@@ -112,12 +112,12 @@
 header h1 {
     font-size: 1.5rem;
     font-weight: normal;
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
     color: var(--text-highlight);
 }
 
 header h1 pre {
-    font-family: 'Berkeley Mono', 'Courier New', 'Monaco', monospace;
+    font-family: var(--font-family);
     font-size: 0.8rem;
     line-height: 1.2;
     margin: 0;
@@ -131,15 +131,15 @@ header h1 pre {
     font-size: 0.9rem;
     color: var(--text-secondary);
     border-bottom: 1px solid var(--border-primary);
-    padding-bottom: 0.5rem;
+    padding-bottom: var(--spacing-sm);
 }
 
 /* Links Grid */
 .links-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, 201px);
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
     justify-content: start;
 }
 
@@ -151,17 +151,17 @@ header h1 pre {
 .category-title {
     color: var(--text-highlight);
     font-size: 1.1rem;
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
     border-bottom: 1px solid var(--border-primary);
-    padding-bottom: 0.5rem;
+    padding-bottom: var(--spacing-sm);
 }
 
 .link-item {
     display: flex;
     align-items: center;
-    padding: 0.5rem 0;
+    padding: var(--spacing-sm) 0;
     cursor: pointer;
-    transition: color 0.2s ease;
+    transition: color var(--transition-fast);
     text-decoration: none;
     color: var(--text-secondary);
 }
@@ -176,9 +176,9 @@ header h1 pre {
 
 .link-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--spacing-sm);
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity var(--transition-fast);
 }
 
 .link-item:hover .link-actions {
@@ -188,12 +188,12 @@ header h1 pre {
 .docs-btn {
     background: none;
     border: none;
-    color: var(--bg-tertiary);
     cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--bg-tertiary);
     font-size: 0.8rem;
     padding: 0.2rem 0.4rem;
-    border-radius: 2px;
-    transition: all 0.2s ease;
+    border-radius: var(--border-radius-sm);
 }
 
 .docs-btn:hover {
@@ -228,38 +228,30 @@ header h1 pre {
 .docs-content h2,
 .docs-content h3 {
     color: var(--text-highlight);
-    margin: 1rem 0 0.5rem 0;
+    margin: var(--spacing-md) 0 var(--spacing-sm) 0;
 }
 
-.docs-content h1 {
-    font-size: 1.3rem;
-}
-
-.docs-content h2 {
-    font-size: 1.2rem;
-}
-
-.docs-content h3 {
-    font-size: 1.1rem;
-}
+.docs-content h1 { font-size: 1.3rem; }
+.docs-content h2 { font-size: 1.2rem; }
+.docs-content h3 { font-size: 1.1rem; }
 
 .docs-content p {
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
 }
 
 .docs-content code {
     background-color: var(--bg-primary);
     padding: 0.2rem 0.4rem;
-    border-radius: 2px;
+    border-radius: var(--border-radius-sm);
     color: var(--text-highlight);
 }
 
 .docs-content pre {
     background-color: var(--bg-primary);
-    padding: 1rem;
-    border-radius: 4px;
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
     overflow-x: auto;
-    margin: 1rem 0;
+    margin: var(--spacing-md) 0;
 }
 
 .docs-content pre code {
@@ -269,13 +261,14 @@ header h1 pre {
 
 .docs-content ul,
 .docs-content ol {
-    margin-left: 2rem;
-    margin-bottom: 1rem;
+    margin-left: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
 }
 
 .docs-content a {
     color: var(--text-highlight);
     text-decoration: underline;
+    transition: color var(--transition-fast);
 }
 
 .docs-content a:hover {

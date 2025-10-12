@@ -7,13 +7,13 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Berkeley Mono', 'Courier New', 'Monaco', monospace;
+    font-family: var(--font-family);
 }
 
 body {
     background-color: var(--bg-primary);
     color: var(--text-highlight);
-    font-family: 'Berkeley Mono', 'Courier New', 'Monaco', monospace;
+    font-family: var(--font-family);
     font-size: 14px;
     line-height: 1.6;
     min-height: 100vh;
@@ -31,17 +31,17 @@ body {
 .main-content {
     flex: 1;
     overflow-y: auto;
-    transition: margin-left 0.3s ease;
+    transition: margin-left var(--transition-medium);
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: var(--spacing-xl);
 }
 
 header {
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-xl);
 }
 
 /* Desktop behavior */
@@ -72,7 +72,7 @@ header {
         height: 100vh;
         z-index: 1000;
         transform: translateY(-100%);
-        transition: transform 0.3s ease;
+        transition: transform var(--transition-medium);
     }
 
     .docs-panel.open {
@@ -88,12 +88,12 @@ header {
     }
 
     .container {
-        padding: 1rem;
+        padding: var(--spacing-md);
     }
 
     .links-grid {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: var(--spacing-xl);
     }
 
     /* Always show docs buttons on mobile since hover doesn't work */
